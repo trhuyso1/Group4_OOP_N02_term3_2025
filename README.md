@@ -7,6 +7,7 @@
 # Project: point management
 # Object: sinh viên, môn học, lớp học, điểm
 Sinh viên: bao gồm tất cả thông tin liên quan đến sinh viên
+
 Class Sinhvien{
 
        int SinhvienID;
