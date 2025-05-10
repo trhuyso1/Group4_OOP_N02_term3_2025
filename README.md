@@ -1,3 +1,2 @@
-# Group4_OOP_N02_term3_2025
 # HỆ THỐNG QUẢN LÝ ĐIỂM MÔN ĐẠI CƯƠNG CỦA SINH VIÊN KHOA CNTT
 # GIỚI THIỆU DỰ ÁN
