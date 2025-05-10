@@ -1,2 +1,2 @@
-# HỆ THỐNG QUẢN LÝ ĐIỂM MÔN ĐẠI CƯƠNG CỦA SINH VIÊN KHOA CNTT
+# HỆ THỐNG QUẢN LÝ ĐIỂM MÔN ĐẠI CƯƠNG CỦA SINH VIÊN K17-CNTT2
 # GIỚI THIỆU DỰ ÁN
