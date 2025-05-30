@@ -5,14 +5,22 @@
 1. Nguyễn Trọng Huy
 2. Bùi Thế Phương
 # Project: point management
-Yêu cầu:
-. Giao diện Java Srping Boot- chức năng thông tin điểm của sinh viên
-. Thêm, sửa, xóa điểm của sinh viên
-. Liệt kê thông tin về điểm của sinh viên, có thể lọc ra điểm của từng sinh viên
-. Có chức năng quản lý điểm của sinh viên
-. Thêm, sửa, xóa, tìm kiếm sinh viên
-. Có chức năng gán điểm cho sinh viên
-. Thêm, sửa, xóa, tìm kiếm môn học để chấm điểm cho sinh viên
+# Bài Tập Lớn: Ứng dụng Quản Lý Hệ Thống Điểm Của Sinh Viên
+## Yêu cầu chính:
+- Giao diện Java Spring Boot
+
+## Các chức năng chính
+
+### 1. Quản lý điểm của sinh viên
+- ✅ Thêm, sửa, xóa điểm của sinh viên
+- ✅ Liệt kê thông tin điểm của sinh viên, lọc điểm theo từng sinh viên
+
+### 2. Quản lý sinh viên
+- ✅ Thêm, sửa, xóa sinh viên
+
+### 3. Gán điểm cho sinh viên
+- ✅ Hỗ trợ chức năng gán điểm cho từng sinh viên
+
 # Object: sinh viên, môn học, lớp học, điểm
 Sinh viên: bao gồm tất cả thông tin liên quan đến sinh viên
 
