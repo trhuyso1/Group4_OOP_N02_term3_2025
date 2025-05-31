@@ -5,7 +5,7 @@
 1. Nguyễn Trọng Huy
 2. Bùi Thế Phương
 # Project: point management
-# Bài Tập Lớn: Ứng dụng Quản Lý Hệ Thống Điểm Của Sinh Viên
+# Bài Tập Lớn: Ứng dụng Quản Lý Hệ Thống Điểm Của Sinh Viên Khoa CNTT
 ## Yêu cầu chính:
 - Giao diện Java Spring Boot
 
