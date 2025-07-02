@@ -86,8 +86,8 @@ public class Monhoc {
 
     @Override
     public String toString() {
-        return "Monhoc [maMon=" + maMon + ", tenMon=" + tenMon + ", soTinChi=" + soTinChi + ", sotietLT=" + sotietLT
-                + ", sotietTH=" + sotietTH + ", hocky=" + hocky + "]";
+        return String.format("%-8s | %-25s | %-8d | %-10s | %-10s | %-6s",
+            maMon, tenMon, soTinChi, sotietLT, sotietTH, hocky);
     }
     
 }

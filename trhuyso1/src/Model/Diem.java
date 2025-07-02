@@ -85,11 +85,14 @@ public class Diem {
 
     @Override
     public String toString() {
-        return "Diem [student=" + student.getFullName() +
-                ", monhoc=" + monhoc.getTenMon() +
-                ", diemMon=" + diemMon +
-                ", diemHe4=" + diemHe4 +
-                ", diemChu=" + diemChu +
-                ", danhGia=" + danhGia + "]";
+        return String.format("%-8s | %-20s | %-25s | %6.2f | %4.1f | %-3s | %-12s",
+            student.getMsv(),
+            student.getFullName(),
+            monhoc.getTenMon(),
+            diemMon,
+            diemHe4,
+            diemChu,
+            danhGia
+        );
     }
 }
