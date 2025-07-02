@@ -1,11 +1,11 @@
-package test;
+package com.example.servingwebcontent.test;
 
-import CRUD.ListDiem;
-import CRUD.ListStudent;
-import CRUD.ListMonHoc;
-import Model.Diem;
-import Model.Student;
-import Model.Monhoc;
+import com.example.servingwebcontent.CRUD.ListDiem;
+import com.example.servingwebcontent.Model.Diem;
+import com.example.servingwebcontent.CRUD.ListStudent;
+import com.example.servingwebcontent.Model.Student;
+import com.example.servingwebcontent.CRUD.ListMonHoc;
+import com.example.servingwebcontent.Model.Monhoc;
 import java.util.*;
 
 public class TestDiem {

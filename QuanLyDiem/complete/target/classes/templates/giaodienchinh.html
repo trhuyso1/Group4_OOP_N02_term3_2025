@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang Chính - Quản Lý Điểm Trường CNTT</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="giaodienchinh.css">
+</head>
+<body class="background-animation">
+  <main>
+    <div class="main-dashboard">
+      <div class="dashboard-header">
+        <h2>Xin chào, <span th:text="${username}">Người dùng</span>!</h2>
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span th:text="${role}">Vai trò</span>
+          <form action="/logout" method="post" style="display:inline;">
+            <button type="submit" class="logout-btn">
+              <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </button>
+          </form>
+        </div>
+      </div>
+      <nav class="dashboard-nav">
+        <a href="/students" class="dashboard-btn">
+          <i class="fas fa-users fa-2x"></i>
+          <div>
+            <div><b>Sinh viên</b></div>
+            <small>Quản lý thông tin sinh viên</small>
+          </div>
+        </a>
+        <a href="/subjects" class="dashboard-btn">
+          <i class="fas fa-book fa-2x"></i>
+          <div>
+            <div><b>Môn học</b></div>
+            <small>Quản lý các môn học</small>
+          </div>
+        </a>
+        <a href="/grades" class="dashboard-btn">
+          <i class="fas fa-graduation-cap fa-2x"></i>
+          <div>
+            <div><b>Điểm</b></div>
+            <small>Quản lý điểm số</small>
+          </div>
+        </a>
+      </nav>
+      <div class="dashboard-content">
+        <p>Chào mừng bạn đến với hệ thống quản lý điểm trường CNTT.<br>
+        Vui lòng chọn chức năng ở trên để bắt đầu làm việc.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

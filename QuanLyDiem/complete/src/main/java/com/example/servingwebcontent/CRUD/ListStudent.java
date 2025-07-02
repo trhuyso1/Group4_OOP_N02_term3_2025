@@ -1,6 +1,6 @@
 package com.example.servingwebcontent.CRUD;
 
-import Model.Student;
+import com.example.servingwebcontent.Model.Student;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.stream.Collectors;

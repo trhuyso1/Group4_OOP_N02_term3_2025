@@ -1,0 +1,118 @@
+.main-dashboard {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.97);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.13);
+      padding: 36px 32px 32px 32px;
+    }
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .dashboard-header h2 {
+      color: #2575fc;
+      font-weight: 600;
+      font-size: 2rem;
+      margin: 0;
+    }
+    .user-info {
+      font-size: 1rem;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-info i {
+      color: #2575fc;
+    }
+    .dashboard-nav {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .dashboard-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f7faff;
+      color: #2575fc;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(37,117,252,0.06);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .dashboard-nav a:hover {
+      background: #2575fc;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(37,117,252,0.13);
+    }
+    .dashboard-content {
+      margin-top: 16px;
+      color: #333;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .logout-btn:hover {
+      color: #c0392b;
+      text-decoration: underline;
+    }
+    .dashboard-btn {
+      flex: 1 1 220px;
+      min-width: 220px;
+      max-width: 300px;
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 22px 24px;
+      font-size: 1.15rem;
+      gap: 18px;
+      background: #f7faff;
+      border: 2px solid #e3e9f7;
+      box-shadow: 0 2px 12px rgba(37,117,252,0.07);
+    }
+    .dashboard-btn:hover {
+      background: #2575fc;
+      color: #fff;
+      border-color: #2575fc;
+    }
+    .dashboard-btn small {
+      color: #888;
+      font-size: 0.95em;
+    }
+    .dashboard-btn:hover small {
+      color: #fff;
+    }
+    @media (max-width: 600px) {
+      .main-dashboard {
+        padding: 16px 4vw;
+      }
+      .dashboard-header h2 {
+        font-size: 1.2rem;
+      }
+      .dashboard-nav {
+        flex-direction: column;
+        gap: 14px;
+      }
+      .dashboard-nav a {
+        width: 100%;
+        justify-content: center;
+      }
+    }

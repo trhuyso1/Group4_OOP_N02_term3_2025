@@ -1,7 +1,7 @@
-package test;
+package com.example.servingwebcontent.test;
 
-import CRUD.ListStudent;
-import Model.Student;
+import com.example.servingwebcontent.CRUD.ListStudent;
+import com.example.servingwebcontent.Model.Student;
 
 import java.util.*;
 

@@ -1,6 +1,6 @@
 package com.example.servingwebcontent.CRUD;
 
-import Model.Diem;
+import com.example.servingwebcontent.Model.Diem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.stream.Collectors;

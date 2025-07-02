@@ -1,7 +1,7 @@
-package test;
+package com.example.servingwebcontent.test;
 
-import CRUD.ListMonHoc;
-import Model.Monhoc;
+import com.example.servingwebcontent.CRUD.ListMonHoc;
+import com.example.servingwebcontent.Model.Monhoc;
 import java.util.*;
 
 public class TestMonhoc {
