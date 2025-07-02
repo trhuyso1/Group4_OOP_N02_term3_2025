@@ -81,8 +81,8 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student [msv=" + msv + ", fullName=" + fullName + ", gender=" + gender + ", email=" + email + ", dob="
-                + dob + ", khoa=" + khoa + ", className=" + className + "]";
+        return String.format("%-8s | %-20s | %-6s | %-22s | %-12s | %-8s | %-10s",
+            msv, fullName, gender, email, dob, khoa, className);
     }
 
     

@@ -8,11 +8,9 @@ public class Monhoc {
     private String sotietTH;
     private String hocky;
 
+    public Monhoc() {
 
-    public Monhoc() {}
-
-    
-
+    }
     public Monhoc(String maMon, String tenMon, int soTinChi, String sotietLT, String sotietTH, String hocky) {
         this.maMon = maMon;
         this.tenMon = tenMon;

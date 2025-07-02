@@ -1,5 +1,12 @@
+
+import test.TestStudent;
+import test.TestMonhoc;
+import test.TestDiem;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        TestStudent tst = new TestStudent();
+        tst.dsMauStudent();
+        tst.inStudent();
     }
 }

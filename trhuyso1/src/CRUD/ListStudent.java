@@ -3,6 +3,7 @@ package CRUD;
 import Model.Student;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class ListStudent implements Iterable<Student> {
     private ArrayList<Student> danhSach = new ArrayList<>();
@@ -14,7 +15,7 @@ public class ListStudent implements Iterable<Student> {
     }
 
     public void them(Student obj) {
-        if (timKiem(obj.getMsv()) != null) {
+        if (tonTai(obj.getMsv())) {
             if (hienThongBao)
                 System.out.println("Không thể thêm ID: '" + obj.getMsv() + "' đã tồn tại.");
             return;
@@ -51,13 +52,19 @@ public class ListStudent implements Iterable<Student> {
         return false;
     }
 
-    public Student timKiem(String msv) {
-        for (Student obj : danhSach) {
-            if (obj.getMsv().equalsIgnoreCase(msv)) {
-                return obj;
-            }
-        }
-        return null;
+
+    // Tìm kiếm theo bất kỳ thông tin nào chứa từ khóa (không phân biệt hoa thường)
+    public ArrayList<Student> timKiem(String tuKhoa) {
+        String key = tuKhoa.toLowerCase();
+        return (ArrayList<Student>) danhSach.stream()
+            .filter(s -> s.getMsv().toLowerCase().contains(key)
+                      || s.getFullName().toLowerCase().contains(key)
+                      || s.getGender().toLowerCase().contains(key)
+                      || s.getEmail().toLowerCase().contains(key)
+                      || s.getDob().toLowerCase().contains(key)
+                      || s.getKhoa().toLowerCase().contains(key)
+                      || s.getClassName().toLowerCase().contains(key))
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void inDanhSach() {
@@ -75,7 +82,7 @@ public class ListStudent implements Iterable<Student> {
     }
 
     public boolean tonTai(String msv) {
-        return timKiem(msv) != null;
+        return danhSach.stream().anyMatch(s -> s.getMsv().equalsIgnoreCase(msv));
     }
 
     public boolean isDaThemMau() {

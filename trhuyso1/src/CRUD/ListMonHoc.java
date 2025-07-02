@@ -3,25 +3,33 @@ package CRUD;
 import Model.Monhoc;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class ListMonHoc implements Iterable<Monhoc> {
     private ArrayList<Monhoc> danhSach = new ArrayList<>();
-    private boolean daThemMau = false;
     private boolean hienThongBao = true;
+
+    public ArrayList<Monhoc> getList() {
+        return danhSach;
+    }
 
     public void setHienThongBao(boolean hien) {
         this.hienThongBao = hien;
     }
 
     public void them(Monhoc obj) {
-        if (timKiem(obj.getMaMon()) != null) {
+        if (tonTai(obj.getMaMon())) {
             if (hienThongBao)
-                System.out.println("Không thể thêm ID: '" + obj.getMaMon() + "' đã tồn tại.");
+                System.out.println("Không thể thêm, mã môn đã tồn tại: " + obj.getMaMon());
             return;
         }
         danhSach.add(obj);
         if (hienThongBao)
-            System.out.println("Đã thêm thành công có ID: " + obj.getMaMon());
+            System.out.println("Đã thêm môn: " + obj.getMaMon());
+    }
+
+    public boolean tonTai(String maMon) {
+        return danhSach.stream().anyMatch(m -> m.getMaMon().equalsIgnoreCase(maMon));
     }
 
     public void sua(String maMon, Monhoc objMoi) {
@@ -29,77 +37,39 @@ public class ListMonHoc implements Iterable<Monhoc> {
             if (danhSach.get(i).getMaMon().equalsIgnoreCase(maMon)) {
                 danhSach.set(i, objMoi);
                 if (hienThongBao)
-                    System.out.println("Đã sửa thành công!");
+                    System.out.println("Đã sửa môn: " + maMon);
                 return;
             }
         }
         if (hienThongBao)
-            System.out.println("Không tìm thấy đối tượng có ID: " + maMon);
+            System.out.println("Không tìm thấy môn: " + maMon);
     }
 
     public boolean xoa(String maMon) {
-        for (int i = 0; i < danhSach.size(); i++) {
-            if (danhSach.get(i).getMaMon().equalsIgnoreCase(maMon)) {
-                danhSach.remove(i);
+        Iterator<Monhoc> it = danhSach.iterator();
+        while (it.hasNext()) {
+            if (it.next().getMaMon().equalsIgnoreCase(maMon)) {
+                it.remove();
                 if (hienThongBao)
-                    System.out.println("Đã xóa thành công!");
+                    System.out.println("Đã xoá môn: " + maMon);
                 return true;
             }
         }
         if (hienThongBao)
-            System.out.println("Không tìm thấy đối tượng có ID: " + maMon);
+            System.out.println("Không tìm thấy môn: " + maMon);
         return false;
     }
 
-    public Monhoc timKiem(String maMon) {
-        for (Monhoc obj : danhSach) {
-            if (obj.getMaMon().equalsIgnoreCase(maMon)) {
-                return obj;
-            }
-        }
-        return null;
-    }
-
-    public void inDanhSach() {
-        if (danhSach.isEmpty()) {
-            System.out.println("Danh sách rỗng.");
-            return;
-        }
-        for (Monhoc obj : danhSach) {
-            System.out.println(obj);
-        }
-    }
-
-    public ArrayList<Monhoc> getList() {
-        return danhSach;
-    }
-
-    public boolean tonTai(String maMon) {
-        return timKiem(maMon) != null;
-    }
-
-    public boolean isDaThemMau() {
-        return daThemMau;
-    }
-
-    public void setDaThemMau(boolean daThemMau) {
-        this.daThemMau = daThemMau;
-    }
-
-    public void addList(ArrayList<Monhoc> ds) {
-        if (daThemMau) {
-            if (hienThongBao)
-                System.out.println("Danh sách mẫu đã được thêm.");
-            return;
-        }
-        for (Monhoc obj : ds) {
-            if (timKiem(obj.getMaMon()) == null) {
-                danhSach.add(obj);
-            }
-        }
-        daThemMau = true;
-        if (hienThongBao)
-            System.out.println("Đã thêm danh sách mẫu thành công!");
+    public ArrayList<Monhoc> timKiem(String tuKhoa) {
+        String key = tuKhoa.toLowerCase();
+        return danhSach.stream()
+            .filter(m -> m.getMaMon().toLowerCase().contains(key)
+                      || m.getTenMon().toLowerCase().contains(key)
+                      || String.valueOf(m.getSoTinChi()).contains(key)
+                      || m.getSotietLT().toLowerCase().contains(key)
+                      || m.getSotietTH().toLowerCase().contains(key)
+                      || m.getHocky().toLowerCase().contains(key))
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
