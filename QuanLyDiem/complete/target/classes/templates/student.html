@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sinh Viên</title>
+    <link rel="stylesheet" href="/student.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1><i class="fas fa-users"></i> Quản Lý Sinh Viên</h1>
+            <nav class="breadcrumb">
+                <a href="/giaodienchinh"><i class="fas fa-home"></i> Trang chủ</a> / Sinh viên
+            </nav>
+        </header>
+
+        <!-- Thông báo lỗi/thành công -->
+        <div th:if="${errorMessage}" class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!-- Form thêm/sửa sinh viên luôn hiển thị ở đầu trang -->
+        <div class="form-section">
+            <h2 th:if="${student.msv == null}">
+                <i class="fas fa-plus-circle"></i> Thêm Sinh Viên Mới
+            </h2>
+            <h2 th:if="${student.msv != null}">
+                <i class="fas fa-edit"></i> Chỉnh Sửa Sinh Viên
+            </h2>
+            <form th:action="@{${student.msv == null} ? '/students/add' : '/students/edit'}" method="post" class="student-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="msv">Mã SV:</label>
+                        <input type="text" id="msv" name="msv" th:value="${student.msv}" th:readonly="${student.msv != null}" required class="form-control readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Họ Tên: <span class="required">*</span></label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" th:value="${student.fullName}" placeholder="Nhập họ tên sinh viên" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dob">Ngày Sinh: <span class="required">*</span></label>
+                        <input type="date" id="dob" name="dob" class="form-control" th:value="${student.dob}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Giới Tính: <span class="required">*</span></label>
+                        <select id="gender" name="gender" class="form-control" required>
+                            <option value="">-- Chọn giới tính --</option>
+                            <option value="Nam" th:selected="${student.gender == 'Nam'}">Nam</option>
+                            <option value="Nữ" th:selected="${student.gender == 'Nữ'}">Nữ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email: <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" class="form-control" th:value="${student.email}" placeholder="Nhập email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="khoa">Khoa: <span class="required">*</span></label>
+                        <input type="text" id="khoa" name="khoa" class="form-control" th:value="${student.khoa}" placeholder="Nhập khoa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="className">Lớp: <span class="required">*</span></label>
+                        <input type="text" id="className" name="className" class="form-control" th:value="${student.className}" placeholder="Nhập lớp" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span th:if="${student.msv == null}">Thêm Sinh Viên</span>
+                        <span th:if="${student.msv != null}">Cập Nhật</span>
+                    </button>
+                    <a href="/students" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Hủy
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <div class="search-section">
+            <h3><i class="fas fa-search"></i> Tìm Kiếm Sinh Viên</h3>
+            <form action="/students" method="get" class="search-form">
+                <div class="search-row">
+                    <input type="text" name="keyword" class="form-control search-input" th:value="${keyword}" placeholder="Tìm theo mã SV, tên, email, lớp...">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <a href="/students" class="btn btn-reset">
+                        <i class="fas fa-undo"></i> Làm mới
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng danh sách sinh viên -->
+        <div class="table-section">
+            <h3>
+                <i class="fas fa-list"></i> Danh Sách Sinh Viên
+                <span class="record-count" th:if="${students != null}">
+                    (Tổng: <span th:text="${students.size()}"></span> sinh viên)
+                </span>
+            </h3>
+            <div class="table-wrapper">
+                <table class="data-table" th:if="${students != null and !students.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Mã SV</th>
+                            <th>Họ Tên</th>
+                            <th>Giới Tính</th>
+                            <th>Email</th>
+                            <th>Ngày Sinh</th>
+                            <th>Khoa</th>
+                            <th>Lớp</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${students}">
+                            <td th:text="${s.msv}"></td>
+                            <td th:text="${s.fullName}"></td>
+                            <td th:text="${s.gender}"></td>
+                            <td th:text="${s.email}"></td>
+                            <td th:text="${s.dob}"></td>
+                            <td th:text="${s.khoa}"></td>
+                            <td th:text="${s.className}"></td>
+                            <td>
+                                <a th:href="@{'/students/edit/' + ${s.msv}}" class="btn btn-edit" title="Sửa"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{'/students/delete/' + ${s.msv}}" class="btn btn-delete" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')"><i class="fas fa-trash"></i></a>
+                                <a th:href="@{'/students/view/' + ${s.msv}}" class="btn btn-view" title="Xem"><i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${students == null or students.isEmpty()}" class="no-data">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Không có sinh viên nào được tìm thấy</p>
+                    <span th:if="${keyword != null and !keyword.isEmpty()}" th:text="'Từ khóa tìm kiếm: ' + ${keyword}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Xem chi tiết sinh viên -->
+        <div class="view-section" th:if="${viewStudent != null}">
+            <h2><i class="fas fa-id-card"></i> Thông Tin Sinh Viên</h2>
+            <table>
+                <tr><th>Mã SV:</th><td th:text="${viewStudent.msv}"></td></tr>
+                <tr><th>Họ tên:</th><td th:text="${viewStudent.fullName}"></td></tr>
+                <tr><th>Giới tính:</th><td th:text="${viewStudent.gender}"></td></tr>
+                <tr><th>Email:</th><td th:text="${viewStudent.email}"></td></tr>
+                <tr><th>Ngày sinh:</th><td th:text="${viewStudent.dob}"></td></tr>
+                <tr><th>Khoa:</th><td th:text="${viewStudent.khoa}"></td></tr>
+                <tr><th>Lớp:</th><td th:text="${viewStudent.className}"></td></tr>
+            </table>
+            <a href="/students" class="btn btn-secondary" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        </div>
+    </div>
+</body>
+</html>

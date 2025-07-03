@@ -1,21 +1,31 @@
 package com.example.servingwebcontent.Model;
 
 public class User {
-    String userName;
-    public String getUserName(){
-        return userName;
+    private String username;
+    private String password;
 
+    public User() {
     }
 
-    public void setUserName(String name){
-        this.userName = name;
-
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
-    public void printUserName(User u){
-        System.out.println(u.userName);
+    public String getUsername() {
+        return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

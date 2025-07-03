@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Môn Học</title>
+    <link rel="stylesheet" href="/monhoc.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1><i class="fas fa-book"></i> Quản Lý Môn Học</h1>
+            <nav class="breadcrumb">
+                <a href="/giaodienchinh"><i class="fas fa-home"></i> Trang chủ</a> / Môn học
+            </nav>
+        </header>
+
+        <!-- Thông báo lỗi/thành công -->
+        <div th:if="${errorMessage}" class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!-- Form thêm/sửa môn học -->
+        <div class="form-section">
+            <h2 th:if="${subject.maMon == null}">
+                <i class="fas fa-plus-circle"></i> Thêm Môn Học Mới
+            </h2>
+            <h2 th:if="${subject.maMon != null}">
+                <i class="fas fa-edit"></i> Chỉnh Sửa Môn Học
+            </h2>
+            <form th:action="@{${subject.maMon == null} ? '/subjects/add' : '/subjects/edit'}" method="post" class="subject-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="maMon">Mã Môn:</label>
+                        <input type="text" id="maMon" name="maMon" th:value="${subject.maMon}" th:readonly="${subject.maMon != null}" required class="form-control readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="tenMon">Tên Môn: <span class="required">*</span></label>
+                        <input type="text" id="tenMon" name="tenMon" class="form-control" th:value="${subject.tenMon}" placeholder="Nhập tên môn học" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="soTinChi">Số Tín Chỉ: <span class="required">*</span></label>
+                        <input type="number" id="soTinChi" name="soTinChi" class="form-control" th:value="${subject.soTinChi}" placeholder="Nhập số tín chỉ" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sotietLT">Số tiết LT:</label>
+                        <input type="text" id="sotietLT" name="sotietLT" class="form-control" th:value="${subject.sotietLT}" placeholder="Số tiết lý thuyết">
+                    </div>
+                    <div class="form-group">
+                        <label for="sotietTH">Số tiết TH:</label>
+                        <input type="text" id="sotietTH" name="sotietTH" class="form-control" th:value="${subject.sotietTH}" placeholder="Số tiết thực hành">
+                    </div>
+                    <div class="form-group">
+                        <label for="hocky">Học kỳ:</label>
+                        <input type="text" id="hocky" name="hocky" class="form-control" th:value="${subject.hocky}" placeholder="Học kỳ">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span th:if="${subject.maMon == null}">Thêm Môn Học</span>
+                        <span th:if="${subject.maMon != null}">Cập Nhật</span>
+                    </button>
+                    <a href="/subjects" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Hủy
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <div class="search-section">
+            <h3><i class="fas fa-search"></i> Tìm Kiếm Môn Học</h3>
+            <form action="/subjects" method="get" class="search-form">
+                <div class="search-row">
+                    <input type="text" name="keyword" class="form-control search-input" th:value="${keyword}" placeholder="Tìm theo mã môn, tên môn...">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <a href="/subjects" class="btn btn-reset">
+                        <i class="fas fa-undo"></i> Làm mới
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng danh sách môn học -->
+        <div class="table-section">
+            <h3>
+                <i class="fas fa-list"></i> Danh Sách Môn Học
+                <span class="record-count" th:if="${subjects != null}">
+                    (Tổng: <span th:text="${subjects.size()}"></span> môn học)
+                </span>
+            </h3>
+            <div class="table-wrapper">
+                <table class="data-table" th:if="${subjects != null and !subjects.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Mã Môn</th>
+                            <th>Tên Môn</th>
+                            <th>Số Tín Chỉ</th>
+                            <th>Số tiết LT</th>
+                            <th>Số tiết TH</th>
+                            <th>Học kỳ</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="mh : ${subjects}">
+                            <td th:text="${mh.maMon}"></td>
+                            <td th:text="${mh.tenMon}"></td>
+                            <td th:text="${mh.soTinChi}"></td>
+                            <td th:text="${mh.sotietLT}"></td>
+                            <td th:text="${mh.sotietTH}"></td>
+                            <td th:text="${mh.hocky}"></td>
+                            <td>
+                                <a th:href="@{'/subjects/edit/' + ${mh.maMon}}" class="btn btn-edit" title="Sửa"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{'/subjects/delete/' + ${mh.maMon}}" class="btn btn-delete" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa môn học này?')"><i class="fas fa-trash"></i></a>
+                                <a th:href="@{'/subjects/view/' + ${mh.maMon}}" class="btn btn-view" title="Xem"><i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${subjects == null or subjects.isEmpty()}" class="no-data">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Không có môn học nào được tìm thấy</p>
+                    <span th:if="${keyword != null and !keyword.isEmpty()}" th:text="'Từ khóa tìm kiếm: ' + ${keyword}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Xem chi tiết môn học -->
+        <div class="view-section" th:if="${viewSubject != null}">
+            <h2><i class="fas fa-id-card"></i> Thông Tin Môn Học</h2>
+            <table>
+                <tr><th>Mã Môn:</th><td th:text="${viewSubject.maMon}"></td></tr>
+                <tr><th>Tên Môn:</th><td th:text="${viewSubject.tenMon}"></td></tr>
+                <tr><th>Số Tín Chỉ:</th><td th:text="${viewSubject.soTinChi}"></td></tr>
+                <tr><th>Số tiết LT:</th><td th:text="${viewSubject.sotietLT}"></td></tr>
+                <tr><th>Số tiết TH:</th><td th:text="${viewSubject.sotietTH}"></td></tr>
+                <tr><th>Học kỳ:</th><td th:text="${viewSubject.hocky}"></td></tr>
+            </table>
+            <a href="/subjects" class="btn btn-secondary" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        </div>
+    </div>
+</body>
+</html>
