@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <label for="fullName">Họ Tên: <span class="required">*</span></label>
-                        <input type="text" id="fullName" name="fullName" class="form-control" th:value="${student.fullName}" placeholder="Nhập họ tên sinh viên" required>
+                        <input type="text" id="fullName" name="fullName" class="form-control" th:value="${student.fullname}" placeholder="Nhập họ tên sinh viên" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group">
                         <label for="className">Lớp: <span class="required">*</span></label>
-                        <input type="text" id="className" name="className" class="form-control" th:value="${student.className}" placeholder="Nhập lớp" required>
+                        <input type="text" id="className" name="className" class="form-control" th:value="${student.classname}" placeholder="Nhập lớp" required>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -127,12 +127,12 @@
                     <tbody>
                         <tr th:each="s : ${students}">
                             <td th:text="${s.msv}"></td>
-                            <td th:text="${s.fullName}"></td>
+                            <td th:text="${s.fullname}"></td>
                             <td th:text="${s.gender}"></td>
                             <td th:text="${s.email}"></td>
                             <td th:text="${s.dob}"></td>
                             <td th:text="${s.khoa}"></td>
-                            <td th:text="${s.className}"></td>
+                            <td th:text="${s.classname}"></td>
                             <td>
                                 <a th:href="@{'/students/edit/' + ${s.msv}}" class="btn btn-edit" title="Sửa"><i class="fas fa-edit"></i></a>
                                 <a th:href="@{'/students/delete/' + ${s.msv}}" class="btn btn-delete" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')"><i class="fas fa-trash"></i></a>
@@ -154,12 +154,12 @@
             <h2><i class="fas fa-id-card"></i> Thông Tin Sinh Viên</h2>
             <table>
                 <tr><th>Mã SV:</th><td th:text="${viewStudent.msv}"></td></tr>
-                <tr><th>Họ tên:</th><td th:text="${viewStudent.fullName}"></td></tr>
+                <tr><th>Họ tên:</th><td th:text="${viewStudent.fullname}"></td></tr>
                 <tr><th>Giới tính:</th><td th:text="${viewStudent.gender}"></td></tr>
                 <tr><th>Email:</th><td th:text="${viewStudent.email}"></td></tr>
                 <tr><th>Ngày sinh:</th><td th:text="${viewStudent.dob}"></td></tr>
                 <tr><th>Khoa:</th><td th:text="${viewStudent.khoa}"></td></tr>
-                <tr><th>Lớp:</th><td th:text="${viewStudent.className}"></td></tr>
+                <tr><th>Lớp:</th><td th:text="${viewStudent.classname}"></td></tr>
             </table>
             <a href="/students" class="btn btn-secondary" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Quay lại</a>
         </div>

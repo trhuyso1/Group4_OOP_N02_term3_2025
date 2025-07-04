@@ -27,12 +27,12 @@ public class StudentAiven {
             while (rs.next()) {
                 Student s = new Student(
                     rs.getString("msv"),
-                    rs.getString("fullName"),
+                    rs.getString("fullname"),
                     rs.getString("gender"),
                     rs.getString("email"),
                     rs.getString("dob"),
                     rs.getString("khoa"),
-                    rs.getString("className")
+                    rs.getString("classname")
                 );
                 students.add(s);
             }
@@ -46,14 +46,14 @@ public class StudentAiven {
     public void addStudent(Student s) {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO student (msv, fullName, gender, email, dob, khoa, className) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                "INSERT INTO student (msv, fullname, gender, email, dob, khoa, classname) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
             ps.setString(1, s.getMsv());
-            ps.setString(2, s.getFullName());
+            ps.setString(2, s.getFullname());
             ps.setString(3, s.getGender());
             ps.setString(4, s.getEmail());
             ps.setString(5, s.getDob());
             ps.setString(6, s.getKhoa());
-            ps.setString(7, s.getClassName());
+            ps.setString(7, s.getClassname());
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
@@ -67,12 +67,12 @@ public class StudentAiven {
             if (rs.next()) {
                 return new Student(
                     rs.getString("msv"),
-                    rs.getString("fullName"),
+                    rs.getString("fullname"),
                     rs.getString("gender"),
                     rs.getString("email"),
                     rs.getString("dob"),
                     rs.getString("khoa"),
-                    rs.getString("className")
+                    rs.getString("classname")
                 );
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -83,13 +83,13 @@ public class StudentAiven {
     public void updateStudent(Student s) {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                "UPDATE student SET fullName=?, gender=?, email=?, dob=?, khoa=?, className=? WHERE msv=?")) {
-            ps.setString(1, s.getFullName());
+                "UPDATE student SET fullname=?, gender=?, email=?, dob=?, khoa=?, classname=? WHERE msv=?")) {
+            ps.setString(1, s.getFullname());
             ps.setString(2, s.getGender());
             ps.setString(3, s.getEmail());
             ps.setString(4, s.getDob());
             ps.setString(5, s.getKhoa());
-            ps.setString(6, s.getClassName());
+            ps.setString(6, s.getClassname());
             ps.setString(7, s.getMsv());
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
@@ -109,7 +109,7 @@ public class StudentAiven {
         List<Student> students = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM student WHERE msv LIKE ? OR fullName LIKE ? OR email LIKE ?")) {
+                "SELECT * FROM student WHERE msv LIKE ? OR fullname LIKE ? OR email LIKE ?")) {
             String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
@@ -118,12 +118,12 @@ public class StudentAiven {
             while (rs.next()) {
                 students.add(new Student(
                     rs.getString("msv"),
-                    rs.getString("fullName"),
+                    rs.getString("fullname"),
                     rs.getString("gender"),
                     rs.getString("email"),
                     rs.getString("dob"),
                     rs.getString("khoa"),
-                    rs.getString("className")
+                    rs.getString("classname")
                 ));
             }
         } catch (Exception e) { e.printStackTrace(); }

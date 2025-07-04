@@ -58,12 +58,12 @@ public class ListStudent implements Iterable<Student> {
         String key = tuKhoa.toLowerCase();
         return (ArrayList<Student>) danhSach.stream()
             .filter(s -> s.getMsv().toLowerCase().contains(key)
-                      || s.getFullName().toLowerCase().contains(key)
+                      || s.getFullname().toLowerCase().contains(key)
                       || s.getGender().toLowerCase().contains(key)
                       || s.getEmail().toLowerCase().contains(key)
                       || s.getDob().toLowerCase().contains(key)
                       || s.getKhoa().toLowerCase().contains(key)
-                      || s.getClassName().toLowerCase().contains(key))
+                      || s.getClassname().toLowerCase().contains(key))
             .collect(Collectors.toCollection(ArrayList::new));
     }
 

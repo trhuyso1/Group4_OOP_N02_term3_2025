@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Điểm</title>
+    <link rel="stylesheet" href="/diem.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1><i class="fas fa-graduation-cap"></i> Quản Lý Điểm</h1>
+            <nav class="breadcrumb">
+                <a href="/giaodienchinh"><i class="fas fa-home"></i> Trang chủ</a> / Điểm
+            </nav>
+        </header>
+
+        <!-- Thông báo lỗi/thành công -->
+        <div th:if="${errorMessage}" class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!-- Form thêm/sửa điểm -->
+        <div class="form-section">
+            <h2 th:if="${grade == null or grade.student == null}">
+                <i class="fas fa-plus-circle"></i> Thêm Điểm Mới
+            </h2>
+            <h2 th:if="${grade != null and grade.student != null}">
+                <i class="fas fa-edit"></i> Chỉnh Sửa Điểm
+            </h2>
+            <form th:action="@{${grade == null or grade.student == null} ? '/grades/add' : '/grades/edit'}" method="post" class="grade-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="msv">Mã SV:</label>
+                        <input type="text" id="msv" name="msv"
+  th:value="${grade != null and grade.student != null ? grade.student.msv : ''}"
+  th:readonly="${grade != null and grade.student != null}" required class="form-control readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="maMon">Mã Môn:</label>
+                        <input type="text" id="maMon" name="maMon"
+  th:value="${grade != null and grade.monhoc != null ? grade.monhoc.maMon : ''}"
+  th:readonly="${grade != null and grade.monhoc != null}" required class="form-control readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="diemMon">Điểm:</label>
+                        <input type="number" step="0.01" id="diemMon" name="diemMon" class="form-control" th:value="${grade != null ? grade.diemMon : ''}" placeholder="Nhập điểm hệ 10" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="diemHe4">Điểm hệ 4:</label>
+                    <input type="text" id="diemHe4" name="diemHe4"
+                        th:value="${grade != null ? grade.diemHe4 : ''}"
+                        readonly class="form-control readonly">
+                </div>
+                <div class="form-group">
+                    <label for="diemChu">Điểm chữ:</label>
+                    <input type="text" id="diemChu" name="diemChu"
+                        th:value="${grade != null ? grade.diemChu : ''}"
+                        readonly class="form-control readonly">
+                </div>
+                <div class="form-group">
+                    <label for="danhGia">Đánh giá:</label>
+                    <input type="text" id="danhGia" name="danhGia"
+                        th:value="${grade != null ? grade.danhGia : ''}"
+                        readonly class="form-control readonly">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span th:if="${grade == null or grade.student == null}">Thêm Điểm</span>
+                        <span th:if="${grade != null and grade.student != null}">Cập Nhật</span>
+                    </button>
+                    <a href="/grades" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Hủy
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <div class="search-section">
+            <h3><i class="fas fa-search"></i> Tìm Kiếm Điểm</h3>
+            <form action="/grades" method="get" class="search-form">
+                <div class="search-row">
+                    <input type="text" name="keyword" class="form-control search-input" th:value="${keyword}" placeholder="Tìm theo mã SV, mã môn, tên SV...">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <a href="/grades" class="btn btn-reset">
+                        <i class="fas fa-undo"></i> Làm mới
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng danh sách điểm -->
+        <div class="table-section">
+            <h3>
+                <i class="fas fa-list"></i> Danh Sách Điểm
+                <span class="record-count" th:if="${grades != null}">
+                    (Tổng: <span th:text="${grades.size()}"></span> bản ghi)
+                </span>
+            </h3>
+            <div class="table-wrapper">
+                <table class="data-table" th:if="${grades != null and !grades.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Mã SV</th>
+                            <th>Tên Môn</th>
+                            <th>Điểm</th>
+                            <th>Điểm hệ 4</th>
+                            <th>Điểm chữ</th>
+                            <th>Đánh giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="d : ${grades}">
+                            <td th:text="${d.student.msv}"></td>
+                            <td th:text="${d.monhoc.tenMon}"></td>
+                            <td th:text="${d.diemMon}"></td>
+                            <td th:text="${d.diemHe4}"></td>
+                            <td th:text="${d.diemChu}"></td>
+                            <td th:text="${d.danhGia}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${grades == null or grades.isEmpty()}" class="no-data">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Không có bản ghi điểm nào được tìm thấy</p>
+                    <span th:if="${keyword != null and !keyword.isEmpty()}" th:text="'Từ khóa tìm kiếm: ' + ${keyword}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Xem chi tiết điểm -->
+        <div class="view-section" th:if="${viewGrade != null}">
+            <h2><i class="fas fa-id-card"></i> Thông Tin Chi Tiết Điểm</h2>
+            <table>
+                <tr><th>Mã SV:</th><td th:text="${viewGrade.student.msv}"></td></tr>
+                <tr><th>Tên SV:</th><td th:text="${viewGrade.student.fullName}"></td></tr>
+                <tr><th>Mã Môn:</th><td th:text="${viewGrade.monhoc.maMon}"></td></tr>
+                <tr><th>Tên Môn:</th><td th:text="${viewGrade.monhoc.tenMon}"></td></tr>
+                <tr><th>Điểm:</th><td th:text="${viewGrade.diemMon}"></td></tr>
+                <tr><th>Điểm hệ 4:</th><td th:text="${viewGrade.diemHe4}"></td></tr>
+                <tr><th>Điểm chữ:</th><td th:text="${viewGrade.diemChu}"></td></tr>
+                <tr><th>Đánh giá:</th><td th:text="${viewGrade.danhGia}"></td></tr>
+            </table>
+            <a href="/grades" class="btn btn-secondary" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        </div>
+    </div>
+</body>
+</html>

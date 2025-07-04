@@ -71,7 +71,7 @@ public class ListDiem implements Iterable<Diem> {
         String key = tuKhoa.toLowerCase();
         return danhSach.stream()
             .filter(d -> d.getStudent().getMsv().toLowerCase().contains(key)
-                      || d.getStudent().getFullName().toLowerCase().contains(key)
+                      || d.getStudent().getFullname().toLowerCase().contains(key)
                       || d.getMonhoc().getMaMon().toLowerCase().contains(key)
                       || d.getMonhoc().getTenMon().toLowerCase().contains(key)
                       || String.valueOf(d.getDiemMon()).contains(key)

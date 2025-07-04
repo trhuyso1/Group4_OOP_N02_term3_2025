@@ -94,7 +94,7 @@ public class TestStudent {
             System.out.println("Không tìm thấy sinh viên.");
             return;
         }
-        System.out.println("Đang sửa thông tin cho: " + old.getFullName());
+        System.out.println("Đang sửa thông tin cho: " + old.getFullname());
         System.out.print("Tên mới: ");
         String name = scanner.nextLine();
         System.out.print("Giới tính mới: ");

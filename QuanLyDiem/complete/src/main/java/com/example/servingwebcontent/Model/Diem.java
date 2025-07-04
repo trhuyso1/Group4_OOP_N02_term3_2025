@@ -90,7 +90,7 @@ public class Diem {
     public String toString() {
         return String.format("%-8s | %-20s | %-25s | %6.2f | %4.1f | %-3s | %-12s",
             student.getMsv(),
-            student.getFullName(),
+            student.getFullname(),
             monhoc.getTenMon(),
             diemMon,
             diemHe4,
