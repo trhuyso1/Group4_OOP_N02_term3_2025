@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.servingwebcontent.database.userAiven;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class LoginController {
 
@@ -22,27 +24,20 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        Model model) {
-
-        System.out.println("Đăng nhập: " + username);
-
-        // Kiểm tra tài khoản admin mặc định
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Model model,
+                        HttpSession session) {
         if (username.equals("admin") && password.equals("111111")) {
-            model.addAttribute("username", "admin");
-            model.addAttribute("role", "admin");
-            return "giaodienchinh"; // <-- Sửa lại tên view
+            session.setAttribute("username", "admin");
+            session.setAttribute("role", "admin");
+            return "giaodienchinh";
         }
-
-        // Kiểm tra tài khoản trong database
         if (userService.authenticateUser(username, password)) {
-            System.out.println("Dăng nhập user thành công: " + username);
-            model.addAttribute("username", username);
-            model.addAttribute("role", "user");
-            return "giaodienchinh"; // <-- Sửa lại tên view
+            session.setAttribute("username", username);
+            session.setAttribute("role", "user");
+            return "giaodienchinh";
         }
-
         model.addAttribute("error", "Sai tài khoản hoặc mật khẩu");
         model.addAttribute("port", serverPort);
         return "index";
@@ -55,10 +50,10 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username,
-                          @RequestParam String password,
-                          @RequestParam String confirmPassword,
-                          Model model) {
+    public String register(@RequestParam("username") String username,
+                           @RequestParam("password") String password,
+                           @RequestParam("confirmPassword") String confirmPassword,
+                           Model model) {
 
         System.out.println("📝 Đăng ký tài khoản: " + username);
 
@@ -99,7 +94,15 @@ public class LoginController {
     }
 
     @GetMapping("/giaodienchinh")
-    public String dashboard() {
+    public String mainPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+        if (username == null) {
+            // Nếu chưa đăng nhập, chuyển về trang login
+            return "login";
+        }
+        model.addAttribute("username", username);
+        model.addAttribute("role", role);
         return "giaodienchinh";
     }
 }

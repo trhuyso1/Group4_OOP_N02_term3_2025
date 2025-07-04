@@ -35,7 +35,7 @@ public class StudentController {
     @PostMapping("/students/add")
     public String addStudent(@ModelAttribute Student student) {
         studentDB.addStudent(student);
-        return "redirect:/students";
+        return "students";
     }
 
     @GetMapping("/students/edit/{msv}")
@@ -48,13 +48,13 @@ public class StudentController {
     @PostMapping("/students/edit")
     public String editStudent(@ModelAttribute Student student) {
         studentDB.updateStudent(student);
-        return "redirect:/students";
+        return "students";
     }
 
     @GetMapping("/students/delete/{msv}")
     public String deleteStudent(@PathVariable String msv) {
         studentDB.deleteStudent(msv);
-        return "redirect:/students";
+        return "students";
     }
 
     @GetMapping("/students/view/{msv}")

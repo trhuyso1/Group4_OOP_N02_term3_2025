@@ -1,5 +1,8 @@
 package com.example.servingwebcontent.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Diem {
     private Student student;
     private Monhoc monhoc;
@@ -95,4 +98,10 @@ public class Diem {
             danhGia
         );
     }
+
+    public boolean addDiem(Diem grade) { return false; }
+    public boolean updateDiem(Diem grade) { return false; }
+    public boolean deleteDiem(String msv, String maMon) { return false; }
+    public Diem findDiem(String msv, String maMon) { return null; }
+    public List<Diem> searchByAnyField(String keyword) { return new ArrayList<>(); }
 }
