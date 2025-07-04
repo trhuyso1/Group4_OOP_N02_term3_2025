@@ -14,7 +14,7 @@ public class StudentAiven {
     private Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-            "jdbc:mysql://mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/defaultdb?ssl-mode=REQUIRED",
+            "jdbc:mysql://mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/quanlydiem?ssl-mode=REQUIRED",
             "avnadmin", "AVNS_tvvJpWj2LldY7V1XllZ"
         );
     }

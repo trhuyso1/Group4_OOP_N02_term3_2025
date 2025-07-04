@@ -10,23 +10,22 @@ public class diemAiven {
     public Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-            "jdbc:mysql://mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/defaultdb?ssl-mode=REQUIRED",
+            "jdbc:mysql://mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/quanlydiem?ssl-mode=REQUIRED",
             "avnadmin", "AVNS_tvvJpWj2LldY7V1XllZ"
         );
     }
 
     public List<Diem> getAllDiem() {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, m.tenMon, d.diemMon " +
-                     "FROM diem d JOIN monhoc m ON d.maMon = m.maMon";
+        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon";
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Student sv = new Student();
-                sv.setMsv(rs.getString("msv")); // Chỉ set mã SV
+                sv.setMsv(rs.getString("msv"));
                 Monhoc mh = new Monhoc();
-                mh.setTenMon(rs.getString("tenMon"));
+                mh.setTenMon(rs.getString("ten_mon"));
                 Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
                 list.add(diem);
             }
@@ -70,7 +69,7 @@ public class diemAiven {
     }
 
     public Diem findDiem(String msv, String maMon) {
-        String sql = "SELECT d.msv, d.maMon, m.tenMon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.maMon WHERE d.msv=? AND d.maMon=?";
+        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon WHERE d.msv=? AND d.maMon=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, msv);
@@ -80,7 +79,7 @@ public class diemAiven {
                 Student sv = new Student();
                 sv.setMsv(rs.getString("msv"));
                 Monhoc mh = new Monhoc();
-                mh.setTenMon(rs.getString("tenMon"));
+                mh.setTenMon(rs.getString("ten_mon"));
                 return new Diem(sv, mh, rs.getDouble("diemMon"));
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -89,9 +88,8 @@ public class diemAiven {
 
     public List<Diem> searchByAnyField(String keyword) {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, d.maMon, m.tenMon, d.diemMon " +
-                     "FROM diem d JOIN monhoc m ON d.maMon = m.maMon " +
-                     "WHERE d.msv LIKE ? OR d.maMon LIKE ? OR m.tenMon LIKE ?";
+        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon " +
+                     "WHERE d.msv LIKE ? OR m.ten_mon LIKE ? OR d.maMon LIKE ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             String kw = "%" + keyword + "%";
@@ -103,11 +101,24 @@ public class diemAiven {
                 Student sv = new Student();
                 sv.setMsv(rs.getString("msv"));
                 Monhoc mh = new Monhoc();
-                mh.setTenMon(rs.getString("tenMon"));
+                mh.setTenMon(rs.getString("ten_mon"));
                 Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
                 list.add(diem);
             }
         } catch (Exception e) { e.printStackTrace(); }
         return list;
+    }
+
+    public boolean userExists(String username) {
+        String sql = "SELECT username FROM login WHERE username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // true nếu có user, false nếu chưa có
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

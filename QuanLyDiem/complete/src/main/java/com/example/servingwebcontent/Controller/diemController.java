@@ -37,7 +37,7 @@ public class diemController {
     public String add(@ModelAttribute Diem grade, Model model) {
         boolean success = db.addDiem(grade);
         // Có thể set flash attribute nếu muốn thông báo
-        return "redirect:/grades";
+        return "grades";
     }
 
     @GetMapping("/grades/edit/{msv}/{maMon}")
@@ -51,13 +51,13 @@ public class diemController {
     @PostMapping("/grades/edit")
     public String edit(@ModelAttribute Diem grade, Model model) {
         boolean success = db.updateDiem(grade);
-        return "redirect:/grades";
+        return "grades";
     }
 
     @GetMapping("/grades/delete/{msv}/{maMon}")
     public String delete(@PathVariable String msv, @PathVariable String maMon, Model model) {
         boolean success = db.deleteDiem(msv, maMon);
-        return "redirect:/grades";
+        return "grades";
     }
 
     @GetMapping("/grades/view/{msv}/{maMon}")
