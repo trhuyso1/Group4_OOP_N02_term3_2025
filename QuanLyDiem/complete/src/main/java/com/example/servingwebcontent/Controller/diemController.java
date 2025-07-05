@@ -2,6 +2,8 @@ package com.example.servingwebcontent.Controller;
 
 import com.example.servingwebcontent.database.diemAiven;
 import com.example.servingwebcontent.Model.Diem;
+import com.example.servingwebcontent.Model.Monhoc;
+import com.example.servingwebcontent.Model.Student;
 import com.example.servingwebcontent.database.StudentAiven;
 import com.example.servingwebcontent.database.monhocAiven;
 import org.springframework.stereotype.Controller;
@@ -27,16 +29,42 @@ public class diemController {
         }
         model.addAttribute("grades", grades);
         model.addAttribute("grade", new Diem());
-        // Thêm 2 dòng sau để truyền danh sách sinh viên và môn học
         model.addAttribute("students", studentDB.getAllStudents());
         model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";
     }
 
     @PostMapping("/grades/add")
-    public String add(@ModelAttribute Diem grade) {
-        db.addDiem(grade);
-        return "redirect:/grades";
+    public String add(@RequestParam("msv") String msv,
+                      @RequestParam("maMon") String maMon,
+                      @RequestParam("diemMon") double diemMon,
+                      Model model) {
+        if (msv == null || msv.isEmpty() || maMon == null || maMon.isEmpty()) {
+            model.addAttribute("errorMessage", "Vui lòng chọn sinh viên và môn học!");
+        } else if (diemMon < 0 || diemMon > 10) {
+            model.addAttribute("errorMessage", "Điểm phải từ 0 đến 10!");
+        } else {
+            try {
+                Diem grade = new Diem();
+                Student sv = new Student();
+                sv.setMsv(msv);
+                grade.setStudent(sv);
+                Monhoc mh = new Monhoc();
+                mh.setMaMon(maMon);
+                grade.setMonhoc(mh);
+                grade.setDiemMon(diemMon);
+                db.addDiem(grade);
+                model.addAttribute("successMessage", "Thêm điểm thành công!");
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", "Lỗi khi thêm điểm: " + e.getMessage());
+            }
+        }
+        List<Diem> grades = db.getAllDiem();
+        model.addAttribute("grades", grades);
+        model.addAttribute("grade", new Diem());
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
+        return "diem";
     }
 
     @GetMapping("/grades/edit/{msv}/{maMon}")
@@ -44,22 +72,62 @@ public class diemController {
         Diem grade = db.findDiem(msv, maMon);
         model.addAttribute("grade", grade);
         model.addAttribute("grades", db.getAllDiem());
-        // Thêm 2 dòng sau
         model.addAttribute("students", studentDB.getAllStudents());
         model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";
     }
 
     @PostMapping("/grades/edit")
-    public String edit(@ModelAttribute Diem grade) {
-        db.updateDiem(grade);
-        return "redirect:/grades";
+    public String edit(@RequestParam("msv") String msv,
+                   @RequestParam("maMon") String maMon,
+                   @RequestParam("diemMon") double diemMon,
+                   Model model) {
+        try {
+            if (diemMon < 0 || diemMon > 10) {
+                model.addAttribute("errorMessage", "Điểm phải từ 0 đến 10!");
+                // Truyền lại dữ liệu để hiển thị form
+                List<Diem> grades = db.getAllDiem();
+                model.addAttribute("grades", grades);
+                model.addAttribute("grade", new Diem());
+                model.addAttribute("students", studentDB.getAllStudents());
+                model.addAttribute("subjects", subjectDB.getAllMonhoc());
+                return "diem";
+            }
+            Diem grade = new Diem();
+            Student sv = new Student();
+            sv.setMsv(msv);
+            grade.setStudent(sv);
+            Monhoc mh = new Monhoc();
+            mh.setMaMon(maMon);
+            grade.setMonhoc(mh);
+            grade.setDiemMon(diemMon);
+            db.updateDiem(grade);
+            model.addAttribute("successMessage", "Cập nhật điểm thành công!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Lỗi khi cập nhật điểm: " + e.getMessage());
+        }
+        List<Diem> grades = db.getAllDiem();
+        model.addAttribute("grades", grades);
+        model.addAttribute("grade", new Diem());
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
+        return "diem";
     }
 
     @GetMapping("/grades/delete/{msv}/{maMon}")
-    public String delete(@PathVariable String msv, @PathVariable String maMon) {
-        db.deleteDiem(msv, maMon);
-        return "redirect:/grades";
+    public String delete(@PathVariable String msv, @PathVariable String maMon, Model model) {
+        try {
+            db.deleteDiem(msv, maMon);
+            model.addAttribute("successMessage", "Xóa điểm thành công!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Lỗi khi xóa điểm: " + e.getMessage());
+        }
+        List<Diem> grades = db.getAllDiem();
+        model.addAttribute("grades", grades);
+        model.addAttribute("grade", new Diem());
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
+        return "diem";
     }
 
     @GetMapping("/grades/view/{msv}/{maMon}")
@@ -67,7 +135,7 @@ public class diemController {
         Diem grade = db.findDiem(msv, maMon);
         model.addAttribute("viewGrade", grade);
         model.addAttribute("grades", db.getAllDiem());
-        // Thêm 2 dòng sau
+        model.addAttribute("grade", new Diem());
         model.addAttribute("students", studentDB.getAllStudents());
         model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";

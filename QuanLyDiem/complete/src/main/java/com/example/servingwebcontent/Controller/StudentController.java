@@ -28,14 +28,17 @@ public class StudentController {
     }
 
     @PostMapping("/students/add")
-    public String addStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+    public String addStudent(@ModelAttribute Student student, Model model) {
         try {
             studentDB.addStudent(student);
-            redirectAttributes.addFlashAttribute("successMessage", "Thêm sinh viên thành công!");
+            model.addAttribute("successMessage", "Thêm sinh viên thành công!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi thêm sinh viên: " + e.getMessage());
+            model.addAttribute("errorMessage", "Lỗi khi thêm sinh viên: " + e.getMessage());
         }
-        return "redirect:/students";
+        List<Student> students = studentDB.getAllStudents();
+        model.addAttribute("students", students);
+        model.addAttribute("student", new Student());
+        return "student";
     }
 
     @GetMapping("/students/edit/{msv}")
@@ -54,25 +57,31 @@ public class StudentController {
     }
 
     @PostMapping("/students/edit")
-    public String editStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+    public String editStudent(@ModelAttribute Student student, Model model) {
         try {
             studentDB.updateStudent(student);
-            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sinh viên thành công!");
+            model.addAttribute("successMessage", "Cập nhật sinh viên thành công!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi cập nhật sinh viên: " + e.getMessage());
+            model.addAttribute("errorMessage", "Lỗi khi cập nhật sinh viên: " + e.getMessage());
         }
-        return "redirect:/students";
+        List<Student> students = studentDB.getAllStudents();
+        model.addAttribute("students", students);
+        model.addAttribute("student", new Student());
+        return "student";
     }
 
     @GetMapping("/students/delete/{msv}")
-    public String deleteStudent(@PathVariable String msv, RedirectAttributes redirectAttributes) {
+    public String deleteStudent(@PathVariable String msv, Model model) {
         try {
             studentDB.deleteStudent(msv);
-            redirectAttributes.addFlashAttribute("successMessage", "Xóa sinh viên thành công!");
+            model.addAttribute("successMessage", "Xóa sinh viên thành công!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi xóa sinh viên: " + e.getMessage());
+            model.addAttribute("errorMessage", "Lỗi khi xóa sinh viên: " + e.getMessage());
         }
-        return "redirect:/students";
+        List<Student> students = studentDB.getAllStudents();
+        model.addAttribute("students", students);
+        model.addAttribute("student", new Student());
+        return "student";
     }
 
     @GetMapping("/students/view/{msv}")

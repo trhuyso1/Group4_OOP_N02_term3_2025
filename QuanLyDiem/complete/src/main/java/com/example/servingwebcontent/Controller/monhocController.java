@@ -27,9 +27,17 @@ public class monhocController {
     }
 
     @PostMapping("/subjects/add")
-    public String add(@ModelAttribute Monhoc subject) {
-        db.addMonhoc(subject);
-        return "redirect:/subjects";
+    public String add(@ModelAttribute Monhoc subject, Model model) {
+        try {
+            db.addMonhoc(subject);
+            model.addAttribute("successMessage", "Thêm môn học thành công!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Lỗi khi thêm môn học: " + e.getMessage());
+        }
+        List<Monhoc> subjects = db.getAllMonhoc();
+        model.addAttribute("subjects", subjects);
+        model.addAttribute("subject", new Monhoc());
+        return "monhoc";
     }
 
     @GetMapping("/subjects/edit/{maMon}")
@@ -48,15 +56,31 @@ public class monhocController {
     }
 
     @PostMapping("/subjects/edit")
-    public String edit(@ModelAttribute Monhoc subject) {
-        db.updateMonhoc(subject);
-        return "redirect:/subjects";
+    public String edit(@ModelAttribute Monhoc subject, Model model) {
+        try {
+            db.updateMonhoc(subject);
+            model.addAttribute("successMessage", "Cập nhật môn học thành công!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Lỗi khi cập nhật môn học: " + e.getMessage());
+        }
+        List<Monhoc> subjects = db.getAllMonhoc();
+        model.addAttribute("subjects", subjects);
+        model.addAttribute("subject", new Monhoc());
+        return "monhoc";
     }
 
     @GetMapping("/subjects/delete/{maMon}")
-    public String delete(@PathVariable String maMon) {
-        db.deleteMonhoc(maMon);
-        return "redirect:/subjects";
+    public String delete(@PathVariable String maMon, Model model) {
+        try {
+            db.deleteMonhoc(maMon);
+            model.addAttribute("successMessage", "Xóa môn học thành công!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Lỗi khi xóa môn học: " + e.getMessage());
+        }
+        List<Monhoc> subjects = db.getAllMonhoc();
+        model.addAttribute("subjects", subjects);
+        model.addAttribute("subject", new Monhoc());
+        return "monhoc";
     }
 
     @GetMapping("/subjects/view/{maMon}")

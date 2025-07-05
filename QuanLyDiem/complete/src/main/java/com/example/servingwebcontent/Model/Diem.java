@@ -60,7 +60,9 @@ public class Diem {
 
     // Chuyển điểm hệ 10 sang hệ 4
     private double tinhDiemHe4(double diem) {
-        if (diem >= 8.5) return 4.0;
+        if (diem >= 9.0) return 4.0;
+        else if (diem >=8.5) return  3.7;
+        else if (diem >= 8.0) return 3.5;
         else if (diem >= 7.0) return 3.0;
         else if (diem >= 5.5) return 2.0;
         else if (diem >= 4.0) return 1.0;
@@ -79,11 +81,8 @@ public class Diem {
 
     // Đánh giá kết quả
     private String tinhDanhGia(double diem) {
-        if (diem >= 8.5) return "Giỏi";
-        else if (diem >= 7.0) return "Khá";
-        else if (diem >= 5.5) return "Trung bình";
-        else if (diem >= 4.0) return "Yếu";
-        else return "Không đạt";
+        if (diem >= 4.0) return "Đạt";
+        else return "Trượt";
     }
 
     @Override

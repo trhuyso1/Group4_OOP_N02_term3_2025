@@ -9,8 +9,8 @@ public class userAiven {
     private Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-            "mysql://avnadmin:AVNS_tvvJpWj2LldY7V1XllZ@mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/defaultdb?ssl-mode=REQUIRED",
-            "sqlser", "passs"
+            "jdbc:mysql://mysql-1af5a7c5-quanlydiem.c.aivencloud.com:22784/quanlydiem?ssl-mode=REQUIRED",
+            "avnadmin", "AVNS_tvvJpWj2LldY7V1XllZ"
         );
     }
 
@@ -50,12 +50,12 @@ public class userAiven {
             System.out.println("⚠️ Username already exists: " + username);
             return false;
         }
-
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement("INSERT INTO login (username, password) VALUES (?, ?)")) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             int rows = pstmt.executeUpdate();
+            System.out.println("Rows affected: " + rows);
             if (rows > 0) {
                 System.out.println("✅ User registered successfully: " + username);
                 return true;

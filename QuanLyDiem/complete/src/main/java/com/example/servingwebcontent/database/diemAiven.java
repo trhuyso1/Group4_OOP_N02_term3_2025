@@ -47,12 +47,15 @@ public class diemAiven {
 
     // Thêm điểm
     public boolean addDiem(Diem grade) {
-        String sql = "INSERT INTO diem (msv, maMon, diemMon) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO diem (msv, maMon, diemMon, diemHe4, diemChu, danhGia) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, grade.getStudent().getMsv());
             ps.setString(2, grade.getMonhoc().getMaMon());
             ps.setDouble(3, grade.getDiemMon());
+            ps.setDouble(4, grade.getDiemHe4());
+            ps.setString(5, grade.getDiemChu());
+            ps.setString(6, grade.getDanhGia());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,12 +65,15 @@ public class diemAiven {
 
     // Sửa điểm
     public boolean updateDiem(Diem grade) {
-        String sql = "UPDATE diem SET diemMon = ? WHERE msv = ? AND maMon = ?";
+        String sql = "UPDATE diem SET diemMon = ?, diemHe4 = ?, diemChu = ?, danhGia = ? WHERE msv = ? AND maMon = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, grade.getDiemMon());
-            ps.setString(2, grade.getStudent().getMsv());
-            ps.setString(3, grade.getMonhoc().getMaMon());
+            ps.setDouble(2, grade.getDiemHe4());
+            ps.setString(3, grade.getDiemChu());
+            ps.setString(4, grade.getDanhGia());
+            ps.setString(5, grade.getStudent().getMsv());
+            ps.setString(6, grade.getMonhoc().getMaMon());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

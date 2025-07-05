@@ -1,3 +1,14 @@
+body.background-animation {
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', Arial, sans-serif;
+  background-image: url('/imgs/anhdep1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Ảnh đứng yên khi cuộn */
+  background-position: center center;
+}
+
 .main-dashboard {
       max-width: 900px;
       margin: 40px auto;
