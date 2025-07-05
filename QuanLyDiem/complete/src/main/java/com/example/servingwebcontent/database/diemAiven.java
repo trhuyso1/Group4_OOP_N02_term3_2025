@@ -1,8 +1,9 @@
 package com.example.servingwebcontent.database;
 
 import com.example.servingwebcontent.Model.Diem;
-import com.example.servingwebcontent.Model.Student;
 import com.example.servingwebcontent.Model.Monhoc;
+import com.example.servingwebcontent.Model.Student;
+
 import java.sql.*;
 import java.util.*;
 
@@ -15,16 +16,22 @@ public class diemAiven {
         );
     }
 
+    // Lấy tất cả điểm, JOIN để lấy tên SV và tên môn
     public List<Diem> getAllDiem() {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon";
+        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+                     "FROM diem d " +
+                     "JOIN student s ON d.msv = s.msv " +
+                     "JOIN monhoc m ON d.maMon = m.ma_mon";
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Student sv = new Student();
                 sv.setMsv(rs.getString("msv"));
+                sv.setFullname(rs.getString("fullname"));
                 Monhoc mh = new Monhoc();
+                mh.setMaMon(rs.getString("maMon"));
                 mh.setTenMon(rs.getString("ten_mon"));
                 Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
                 list.add(diem);
@@ -33,6 +40,7 @@ public class diemAiven {
         return list;
     }
 
+    // Thêm điểm
     public boolean addDiem(Diem grade) {
         String sql = "INSERT INTO diem (msv, maMon, diemMon) VALUES (?, ?, ?)";
         try (Connection conn = getConnection();
@@ -45,6 +53,7 @@ public class diemAiven {
         return false;
     }
 
+    // Sửa điểm
     public boolean updateDiem(Diem grade) {
         String sql = "UPDATE diem SET diemMon=? WHERE msv=? AND maMon=?";
         try (Connection conn = getConnection();
@@ -57,6 +66,7 @@ public class diemAiven {
         return false;
     }
 
+    // Xóa điểm
     public boolean deleteDiem(String msv, String maMon) {
         String sql = "DELETE FROM diem WHERE msv=? AND maMon=?";
         try (Connection conn = getConnection();
@@ -68,8 +78,13 @@ public class diemAiven {
         return false;
     }
 
+    // Tìm điểm theo msv, maMon (JOIN để lấy tên)
     public Diem findDiem(String msv, String maMon) {
-        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon WHERE d.msv=? AND d.maMon=?";
+        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+                     "FROM diem d " +
+                     "JOIN student s ON d.msv = s.msv " +
+                     "JOIN monhoc m ON d.maMon = m.ma_mon " +
+                     "WHERE d.msv=? AND d.maMon=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, msv);
@@ -78,7 +93,9 @@ public class diemAiven {
             if (rs.next()) {
                 Student sv = new Student();
                 sv.setMsv(rs.getString("msv"));
+                sv.setFullname(rs.getString("fullname"));
                 Monhoc mh = new Monhoc();
+                mh.setMaMon(rs.getString("maMon"));
                 mh.setTenMon(rs.getString("ten_mon"));
                 return new Diem(sv, mh, rs.getDouble("diemMon"));
             }
@@ -86,39 +103,33 @@ public class diemAiven {
         return null;
     }
 
+    // Tìm kiếm theo keyword (msv, tên SV, mã môn, tên môn)
     public List<Diem> searchByAnyField(String keyword) {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, m.ten_mon, d.diemMon FROM diem d JOIN monhoc m ON d.maMon = m.ma_mon " +
-                     "WHERE d.msv LIKE ? OR m.ten_mon LIKE ? OR d.maMon LIKE ?";
+        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+                     "FROM diem d " +
+                     "JOIN student s ON d.msv = s.msv " +
+                     "JOIN monhoc m ON d.maMon = m.ma_mon " +
+                     "WHERE d.msv LIKE ? OR s.fullname LIKE ? OR d.maMon LIKE ? OR m.ten_mon LIKE ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
             ps.setString(3, kw);
+            ps.setString(4, kw);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Student sv = new Student();
                 sv.setMsv(rs.getString("msv"));
+                sv.setFullname(rs.getString("fullname"));
                 Monhoc mh = new Monhoc();
+                mh.setMaMon(rs.getString("maMon"));
                 mh.setTenMon(rs.getString("ten_mon"));
                 Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
                 list.add(diem);
             }
         } catch (Exception e) { e.printStackTrace(); }
         return list;
-    }
-
-    public boolean userExists(String username) {
-        String sql = "SELECT username FROM login WHERE username = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            return rs.next(); // true nếu có user, false nếu chưa có
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 }

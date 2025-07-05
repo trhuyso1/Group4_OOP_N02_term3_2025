@@ -22,45 +22,51 @@ public class StudentController {
             students = studentDB.getAllStudents();
         }
         model.addAttribute("students", students);
-        model.addAttribute("student", new Student()); // Luôn truyền student rỗng để form hiện
+        model.addAttribute("student", new Student()); // Để form luôn hiển thị
         return "student";
-    }
-
-    @GetMapping("/students/add")
-    public String addStudentForm(Model model) {
-        model.addAttribute("student", new Student());
-        return "student_form";
     }
 
     @PostMapping("/students/add")
     public String addStudent(@ModelAttribute Student student) {
         studentDB.addStudent(student);
-        return "students";
+        return "student";
     }
 
     @GetMapping("/students/edit/{msv}")
-    public String editStudentForm(@PathVariable String msv, Model model) {
+    public String editStudentForm(@PathVariable String msv, Model model, @RequestParam(value = "keyword", required = false) String keyword) {
         Student student = studentDB.getStudentById(msv);
+        List<Student> students;
+        if (keyword != null && !keyword.isEmpty()) {
+            students = studentDB.searchStudents(keyword);
+            model.addAttribute("keyword", keyword);
+        } else {
+            students = studentDB.getAllStudents();
+        }
+        model.addAttribute("students", students);
         model.addAttribute("student", student);
-        return "student_form";
+        return "student";
     }
 
     @PostMapping("/students/edit")
     public String editStudent(@ModelAttribute Student student) {
         studentDB.updateStudent(student);
-        return "students";
+        return "student";
     }
 
     @GetMapping("/students/delete/{msv}")
     public String deleteStudent(@PathVariable String msv) {
         studentDB.deleteStudent(msv);
-        return "students";
+        return "student";
     }
 
     @GetMapping("/students/view/{msv}")
     public String viewStudent(@PathVariable String msv, Model model) {
         Student student = studentDB.getStudentById(msv);
-        model.addAttribute("student", student);
-        return "student_view";
+        model.addAttribute("viewStudent", student);
+        // Lấy lại danh sách để hiển thị bảng
+        List<Student> students = studentDB.getAllStudents();
+        model.addAttribute("students", students);
+        model.addAttribute("student", new Student());
+        return "student";
     }
 }

@@ -99,7 +99,7 @@ public class LoginController {
         String role = (String) session.getAttribute("role");
         if (username == null) {
             // Nếu chưa đăng nhập, chuyển về trang login
-            return "login";
+            return "redirect:/login";
         }
         model.addAttribute("username", username);
         model.addAttribute("role", role);
