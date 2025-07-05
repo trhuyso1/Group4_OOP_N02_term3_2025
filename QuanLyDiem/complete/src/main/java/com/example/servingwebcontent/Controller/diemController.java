@@ -2,6 +2,8 @@ package com.example.servingwebcontent.Controller;
 
 import com.example.servingwebcontent.database.diemAiven;
 import com.example.servingwebcontent.Model.Diem;
+import com.example.servingwebcontent.database.StudentAiven;
+import com.example.servingwebcontent.database.monhocAiven;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import java.util.List;
 @Controller
 public class diemController {
     private diemAiven db = new diemAiven();
+    private StudentAiven studentDB = new StudentAiven();
+    private monhocAiven subjectDB = new monhocAiven();
 
     @GetMapping("/grades")
     public String list(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
@@ -23,6 +27,9 @@ public class diemController {
         }
         model.addAttribute("grades", grades);
         model.addAttribute("grade", new Diem());
+        // Thêm 2 dòng sau để truyền danh sách sinh viên và môn học
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";
     }
 
@@ -37,6 +44,9 @@ public class diemController {
         Diem grade = db.findDiem(msv, maMon);
         model.addAttribute("grade", grade);
         model.addAttribute("grades", db.getAllDiem());
+        // Thêm 2 dòng sau
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";
     }
 
@@ -57,6 +67,9 @@ public class diemController {
         Diem grade = db.findDiem(msv, maMon);
         model.addAttribute("viewGrade", grade);
         model.addAttribute("grades", db.getAllDiem());
+        // Thêm 2 dòng sau
+        model.addAttribute("students", studentDB.getAllStudents());
+        model.addAttribute("subjects", subjectDB.getAllMonhoc());
         return "diem";
     }
 }

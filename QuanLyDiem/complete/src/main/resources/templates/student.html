@@ -26,19 +26,17 @@
             <span th:text="${successMessage}"></span>
         </div>
 
-        <!-- Form thêm/sửa sinh viên luôn hiển thị ở đầu trang -->
+        <!-- Form thêm/sửa sinh viên -->
         <div class="form-section">
+            <!-- Thêm -->
             <h2 th:if="${student.msv == null}">
                 <i class="fas fa-plus-circle"></i> Thêm Sinh Viên Mới
             </h2>
-            <h2 th:if="${student.msv != null}">
-                <i class="fas fa-edit"></i> Chỉnh Sửa Sinh Viên
-            </h2>
-            <form th:action="@{${student.msv == null} ? '/students/add' : '/students/edit'}" method="post" class="student-form">
+            <form th:if="${student.msv == null}" th:action="@{/students/add}" method="post" class="student-form">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="msv">Mã SV:</label>
-                        <input type="text" id="msv" name="msv" th:value="${student.msv}" th:readonly="${student.msv != null}" required class="form-control readonly">
+                        <input type="text" id="msv" name="msv" th:value="${student.msv}" required class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="fullname">Họ Tên: <span class="required">*</span></label>
@@ -75,9 +73,60 @@
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i>
-                        <span th:if="${student.msv == null}">Thêm Sinh Viên</span>
-                        <span th:if="${student.msv != null}">Cập Nhật</span>
+                        <i class="fas fa-save"></i> Thêm Sinh Viên
+                    </button>
+                    <a href="/students" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Hủy
+                    </a>
+                </div>
+            </form>
+
+            <!-- Sửa -->
+            <h2 th:if="${student.msv != null}">
+                <i class="fas fa-edit"></i> Chỉnh Sửa Sinh Viên
+            </h2>
+            <form th:if="${student.msv != null}" th:action="@{/students/edit}" method="post" class="student-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="msv">Mã SV:</label>
+                        <input type="text" id="msv" name="msv" th:value="${student.msv}" readonly class="form-control readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname">Họ Tên: <span class="required">*</span></label>
+                        <input type="text" id="fullname" name="fullname" class="form-control" th:value="${student.fullname}" placeholder="Nhập họ tên sinh viên" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dob">Ngày Sinh: <span class="required">*</span></label>
+                        <input type="date" id="dob" name="dob" class="form-control" th:value="${student.dob}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Giới Tính: <span class="required">*</span></label>
+                        <select id="gender" name="gender" class="form-control" required>
+                            <option value="">-- Chọn giới tính --</option>
+                            <option value="Nam" th:selected="${student.gender == 'Nam'}">Nam</option>
+                            <option value="Nữ" th:selected="${student.gender == 'Nữ'}">Nữ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email: <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" class="form-control" th:value="${student.email}" placeholder="Nhập email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="khoa">Khoa: <span class="required">*</span></label>
+                        <input type="text" id="khoa" name="khoa" class="form-control" th:value="${student.khoa}" placeholder="Nhập khoa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="classname">Lớp: <span class="required">*</span></label>
+                        <input type="text" id="classname" name="classname" class="form-control" th:value="${student.classname}" placeholder="Nhập lớp" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Cập Nhật
                     </button>
                     <a href="/students" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Hủy

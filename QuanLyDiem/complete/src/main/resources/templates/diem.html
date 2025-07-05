@@ -38,15 +38,25 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="msv">Mã SV:</label>
-                        <input type="text" id="msv" name="msv"
-  th:value="${grade != null and grade.student != null ? grade.student.msv : ''}"
-  th:readonly="${grade != null and grade.student != null}" required class="form-control readonly">
+                        <select id="msv" name="msv" class="form-control" th:disabled="${grade != null and grade.student != null}" required>
+                            <option value="">-- Chọn sinh viên --</option>
+                            <option th:each="sv : ${students}"
+                                    th:value="${sv.msv}"
+                                    th:text="${sv.msv + ' - ' + sv.fullname}"
+                                    th:selected="${grade != null and grade.student != null and sv.msv == grade.student.msv}">
+                            </option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="maMon">Mã Môn:</label>
-                        <input type="text" id="maMon" name="maMon"
-  th:value="${grade != null and grade.monhoc != null ? grade.monhoc.maMon : ''}"
-  th:readonly="${grade != null and grade.monhoc != null}" required class="form-control readonly">
+                        <select id="maMon" name="maMon" class="form-control" th:disabled="${grade != null and grade.monhoc != null}" required>
+                            <option value="">-- Chọn môn học --</option>
+                            <option th:each="mh : ${subjects}"
+                                    th:value="${mh.maMon}"
+                                    th:text="${mh.maMon + ' - ' + mh.tenMon}"
+                                    th:selected="${grade != null and grade.monhoc != null and mh.maMon == grade.monhoc.maMon}">
+                            </option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="diemMon">Điểm:</label>
@@ -118,6 +128,7 @@
                             <th>Điểm hệ 4</th>
                             <th>Điểm chữ</th>
                             <th>Đánh giá</th>
+                            <th>Thao Tác</th> <!-- Thêm cột thao tác -->
                         </tr>
                     </thead>
                     <tbody>
@@ -128,6 +139,11 @@
                             <td th:text="${d.diemHe4}"></td>
                             <td th:text="${d.diemChu}"></td>
                             <td th:text="${d.danhGia}"></td>
+                            <td>
+                                <a th:href="@{'/grades/edit/' + ${d.student.msv} + '/' + ${d.monhoc.maMon}}" class="btn btn-edit" title="Sửa"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{'/grades/delete/' + ${d.student.msv} + '/' + ${d.monhoc.maMon}}" class="btn btn-delete" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa điểm này?')"><i class="fas fa-trash"></i></a>
+                                <a th:href="@{'/grades/view/' + ${d.student.msv} + '/' + ${d.monhoc.maMon}}" class="btn btn-view" title="Xem"><i class="fas fa-eye"></i></a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -144,7 +160,7 @@
             <h2><i class="fas fa-id-card"></i> Thông Tin Chi Tiết Điểm</h2>
             <table>
                 <tr><th>Mã SV:</th><td th:text="${viewGrade.student.msv}"></td></tr>
-                <tr><th>Tên SV:</th><td th:text="${viewGrade.student.fullName}"></td></tr>
+                <tr><th>Tên SV:</th><td th:text="${viewGrade.student.fullname}"></td></tr>
                 <tr><th>Mã Môn:</th><td th:text="${viewGrade.monhoc.maMon}"></td></tr>
                 <tr><th>Tên Môn:</th><td th:text="${viewGrade.monhoc.tenMon}"></td></tr>
                 <tr><th>Điểm:</th><td th:text="${viewGrade.diemMon}"></td></tr>

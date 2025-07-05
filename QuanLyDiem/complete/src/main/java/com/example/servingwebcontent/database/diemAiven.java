@@ -19,7 +19,7 @@ public class diemAiven {
     // Lấy tất cả điểm, JOIN để lấy tên SV và tên môn
     public List<Diem> getAllDiem() {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+        String sql = "SELECT d.msv, s.fullname, d.maMon AS maMon, m.ten_mon AS tenMon, d.diemMon " +
                      "FROM diem d " +
                      "JOIN student s ON d.msv = s.msv " +
                      "JOIN monhoc m ON d.maMon = m.ma_mon";
@@ -32,11 +32,16 @@ public class diemAiven {
                 sv.setFullname(rs.getString("fullname"));
                 Monhoc mh = new Monhoc();
                 mh.setMaMon(rs.getString("maMon"));
-                mh.setTenMon(rs.getString("ten_mon"));
-                Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
+                mh.setTenMon(rs.getString("tenMon"));
+                Diem diem = new Diem();
+                diem.setStudent(sv);
+                diem.setMonhoc(mh);
+                diem.setDiemMon(rs.getDouble("diemMon"));
                 list.add(diem);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
 
@@ -49,64 +54,77 @@ public class diemAiven {
             ps.setString(2, grade.getMonhoc().getMaMon());
             ps.setDouble(3, grade.getDiemMon());
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     // Sửa điểm
     public boolean updateDiem(Diem grade) {
-        String sql = "UPDATE diem SET diemMon=? WHERE msv=? AND maMon=?";
+        String sql = "UPDATE diem SET diemMon = ? WHERE msv = ? AND maMon = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, grade.getDiemMon());
             ps.setString(2, grade.getStudent().getMsv());
             ps.setString(3, grade.getMonhoc().getMaMon());
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     // Xóa điểm
     public boolean deleteDiem(String msv, String maMon) {
-        String sql = "DELETE FROM diem WHERE msv=? AND maMon=?";
+        String sql = "DELETE FROM diem WHERE msv = ? AND maMon = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, msv);
             ps.setString(2, maMon);
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     // Tìm điểm theo msv, maMon (JOIN để lấy tên)
     public Diem findDiem(String msv, String maMon) {
-        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+        String sql = "SELECT d.msv, s.fullname, d.maMon AS maMon, m.ten_mon AS tenMon, d.diemMon " +
                      "FROM diem d " +
                      "JOIN student s ON d.msv = s.msv " +
                      "JOIN monhoc m ON d.maMon = m.ma_mon " +
-                     "WHERE d.msv=? AND d.maMon=?";
+                     "WHERE d.msv = ? AND d.maMon = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, msv);
             ps.setString(2, maMon);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Student sv = new Student();
-                sv.setMsv(rs.getString("msv"));
-                sv.setFullname(rs.getString("fullname"));
-                Monhoc mh = new Monhoc();
-                mh.setMaMon(rs.getString("maMon"));
-                mh.setTenMon(rs.getString("ten_mon"));
-                return new Diem(sv, mh, rs.getDouble("diemMon"));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Student sv = new Student();
+                    sv.setMsv(rs.getString("msv"));
+                    sv.setFullname(rs.getString("fullname"));
+                    Monhoc mh = new Monhoc();
+                    mh.setMaMon(rs.getString("maMon"));
+                    mh.setTenMon(rs.getString("tenMon"));
+                    Diem diem = new Diem();
+                    diem.setStudent(sv);
+                    diem.setMonhoc(mh);
+                    diem.setDiemMon(rs.getDouble("diemMon"));
+                    return diem;
+                }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     // Tìm kiếm theo keyword (msv, tên SV, mã môn, tên môn)
     public List<Diem> searchByAnyField(String keyword) {
         List<Diem> list = new ArrayList<>();
-        String sql = "SELECT d.msv, s.fullname, d.maMon, m.ten_mon, d.diemMon " +
+        String sql = "SELECT d.msv, s.fullname, d.maMon AS maMon, m.ten_mon AS tenMon, d.diemMon " +
                      "FROM diem d " +
                      "JOIN student s ON d.msv = s.msv " +
                      "JOIN monhoc m ON d.maMon = m.ma_mon " +
@@ -125,11 +143,16 @@ public class diemAiven {
                 sv.setFullname(rs.getString("fullname"));
                 Monhoc mh = new Monhoc();
                 mh.setMaMon(rs.getString("maMon"));
-                mh.setTenMon(rs.getString("ten_mon"));
-                Diem diem = new Diem(sv, mh, rs.getDouble("diemMon"));
+                mh.setTenMon(rs.getString("tenMon"));
+                Diem diem = new Diem();
+                diem.setStudent(sv);
+                diem.setMonhoc(mh);
+                diem.setDiemMon(rs.getDouble("diemMon"));
                 list.add(diem);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
 }

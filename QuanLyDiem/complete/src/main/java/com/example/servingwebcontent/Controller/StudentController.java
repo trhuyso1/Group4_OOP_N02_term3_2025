@@ -5,6 +5,7 @@ import com.example.servingwebcontent.Model.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,9 +28,14 @@ public class StudentController {
     }
 
     @PostMapping("/students/add")
-    public String addStudent(@ModelAttribute Student student) {
-        studentDB.addStudent(student);
-        return "student";
+    public String addStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+        try {
+            studentDB.addStudent(student);
+            redirectAttributes.addFlashAttribute("successMessage", "Thêm sinh viên thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi thêm sinh viên: " + e.getMessage());
+        }
+        return "redirect:/students";
     }
 
     @GetMapping("/students/edit/{msv}")
@@ -48,15 +54,25 @@ public class StudentController {
     }
 
     @PostMapping("/students/edit")
-    public String editStudent(@ModelAttribute Student student) {
-        studentDB.updateStudent(student);
-        return "student";
+    public String editStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+        try {
+            studentDB.updateStudent(student);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sinh viên thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi cập nhật sinh viên: " + e.getMessage());
+        }
+        return "redirect:/students";
     }
 
     @GetMapping("/students/delete/{msv}")
-    public String deleteStudent(@PathVariable String msv) {
-        studentDB.deleteStudent(msv);
-        return "student";
+    public String deleteStudent(@PathVariable String msv, RedirectAttributes redirectAttributes) {
+        try {
+            studentDB.deleteStudent(msv);
+            redirectAttributes.addFlashAttribute("successMessage", "Xóa sinh viên thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi xóa sinh viên: " + e.getMessage());
+        }
+        return "redirect:/students";
     }
 
     @GetMapping("/students/view/{msv}")
