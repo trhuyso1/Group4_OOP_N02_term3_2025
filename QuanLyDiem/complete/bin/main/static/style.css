@@ -2,14 +2,11 @@ body.background-animation {
   min-height: 100vh;
   margin: 0;
   font-family: 'Poppins', Arial, sans-serif;
-  background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
-  animation: gradientBG 10s ease infinite;
-}
-
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  background-image: url('/imgs/anhdep.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Ảnh đứng yên khi cuộn */
+  background-position: center center;
 }
 
 .center-content {
@@ -19,27 +16,27 @@ body.background-animation {
   min-height: 100vh;
 }
 
+/* Đảm bảo mọi thành phần đều tính padding/border vào width */
+.login-box,
+input[type="text"], input[type="password"] {
+  box-sizing: border-box;
+}
+
+/* Sửa lại width cho .login-box và input để không bị tràn */
 .login-box {
   background: rgba(255,255,255,0.95);
   border-radius: 18px;
   box-shadow: 0 8px 32px 0 rgba(31,38,135,0.2);
   padding: 40px 32px 32px 32px;
-  width: 350px;
-  max-width: 90vw;
+  width: 100%;
+  max-width: 350px;
+  min-width: 0;
   text-align: center;
+  margin: 0 auto;
 }
-
-.login-box h2 {
-  margin-bottom: 28px;
-  font-weight: 600;
-  color: #2575fc;
-  font-size: 2rem;
-  letter-spacing: 1px;
-}
-
 .input-group {
   position: relative;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .input-icon {
@@ -51,8 +48,11 @@ body.background-animation {
   font-size: 1.1rem;
 }
 
+
 input[type="text"], input[type="password"] {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 12px 12px 12px 38px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -60,11 +60,26 @@ input[type="text"], input[type="password"] {
   background: #f7faff;
   transition: border 0.2s;
   outline: none;
+  box-sizing: border-box;
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
   border: 1.5px solid #2575fc;
   background: #fff;
+}
+
+/* Hiệu ứng border khi hợp lệ/không hợp lệ cho input */
+input[type="text"].valid, input[type="password"].valid {
+  border-color: #27ae60 !important;
+  box-shadow: 0 0 8px rgba(39,174,96,0.18);
+}
+input[type="text"].invalid, input[type="password"].invalid {
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 8px rgba(231,76,60,0.18);
+}
+input[type="text"].warning, input[type="password"].warning {
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 8px rgba(255,193,7,0.18);
 }
 
 .login-btn {
@@ -87,42 +102,67 @@ input[type="text"]:focus, input[type="password"]:focus {
   box-shadow: 0 4px 16px rgba(37,117,252,0.15);
 }
 
-.error {
-  color: #e74c3c;
-  margin-top: 10px;
-  font-size: 0.97rem;
-}
-
-.success {
-  color: #27ae60;
-  margin-top: 10px;
-  font-size: 0.97rem;
-}
-
-.register-links {
-  margin-top: 24px;
-  font-size: 0.98rem;
-}
-
-.register-links a {
-  color: #2575fc;
-  text-decoration: none;
+/* Popup lỗi động khi xác nhận mật khẩu sai */
+.error-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ff4757;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+  font-size: 1rem;
   font-weight: 500;
-  margin-left: 4px;
-  transition: color 0.2s;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-.register-links a:hover {
-  color: #6a11cb;
-  text-decoration: underline;
+/* Đảm bảo nút submit đăng ký đồng bộ với đăng nhập */
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,117,252,0.08);
+}
+button[type="submit"]:hover {
+  background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+  box-shadow: 0 4px 16px rgba(37,117,252,0.15);
 }
 
+/* Đảm bảo các icon input luôn căn giữa */
+.input-icon {
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #2575fc !important;
+  font-size: 1.1rem !important;
+}
+
+/* Responsive cho form nhỏ */
 @media (max-width: 480px) {
   .login-box {
-    padding: 24px 8px 16px 8px;
+    padding: 18px 4vw 12px 4vw;
     width: 98vw;
+    max-width: 98vw;
   }
   .login-box h2 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+  }
+  input[type="text"], input[type="password"] {
+    font-size: 0.98rem;
+    padding-left: 36px;
   }
 }
