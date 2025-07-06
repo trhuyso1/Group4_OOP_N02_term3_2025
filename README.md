@@ -277,3 +277,11 @@ INSERT INTO diem (msv, maMon, diemMon, diemHe4, diemChu, danhGia) VALUES
 
 ### Giao diện quản lý điểm
 <img src ="img/Screenshot 2025-07-06 093924.png">
+
+## VIII. Các link
+
+#### Link repo: https://github.com/trhuyso1/Group4_OOP_N02_term3_2025
+
+#### Link readme: https://trhuyso1.github.io/Group4_OOP_N02_term3_2025/
+
+#### Link Demo: 
