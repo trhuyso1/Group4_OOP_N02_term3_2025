@@ -63,10 +63,34 @@ Lớp `Student` đại diện cho sinh viên trong hệ thống. Mỗi sinh viê
 
 **3. Phương thức:**
 
-| Tên phương thức   | Mô tả                                      |
+| Tên phương thức   | Mô tả                                       |
 |-------------------|---------------------------------------------|
 | `get` / `set`     | Truy xuất và cập nhật thuộc tính            |
 | `toString()`      | Hiển thị thông tin sinh viên                |
+
+### Lớp MonHoc (Môn học)
+
+**1. Giới thiệu:**
+
+Lớp `MonHoc` đại diện cho thông tin các môn học trong hệ thống quản lý điểm. Mỗi môn học có mã riêng, tên môn, số tín chỉ, số tiết lý thuyết và thực hành, đồng thời được phân theo học kỳ.
+
+**2. Thuộc tính:**
+
+| Tên thuộc tính   | Kiểu dữ liệu | Mô tả |
+|------------------|--------------|-------|
+| `maMon`          | String       | Mã môn học |
+| `tenMon`         | String       | Tên môn học |
+| `soTinChi`       | int          | Số tín chỉ |
+| `soTietLT`       | String       | Số tiết lý thuyết |
+| `soTietTH`       | String       | Số tiết thực hành |
+| `hocKy`          | String       | Học kỳ |
+
+**3. Phương thức:**
+
+| Tên phương thức | Mô tả |
+|------------------|------|
+| `get` / `set`     | Truy xuất và cập nhật thuộc tính |
+| `toString()`      | Hiển thị thông tin môn học |
 
 ### Lớp Mark (Điểm)
 
