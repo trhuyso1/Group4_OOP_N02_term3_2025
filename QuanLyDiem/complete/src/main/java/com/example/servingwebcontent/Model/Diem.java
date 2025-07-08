@@ -59,7 +59,7 @@ public class Diem {
     }
 
     // Chuyển điểm hệ 10 sang hệ 4
-    private double tinhDiemHe4(double diem) {
+    public double tinhDiemHe4(double diem) {
         if (diem >= 9.0) return 4.0;
         else if (diem >=8.5) return  3.7;
         else if (diem >= 8.0) return 3.5;
@@ -103,4 +103,19 @@ public class Diem {
     public boolean deleteDiem(String msv, String maMon) { return false; }
     public Diem findDiem(String msv, String maMon) { return null; }
     public List<Diem> searchByAnyField(String keyword) { return new ArrayList<>(); }
+
+    public void setDiemChu(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDiemChu'");
+    }
+
+    public void setDanhGia(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDanhGia'");
+    }
+
+    public void setDiemHe4(double double1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDiemHe4'");
+    }
 }

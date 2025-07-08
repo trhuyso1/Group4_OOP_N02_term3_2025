@@ -93,10 +93,17 @@ public class monhocAiven {
         List<Monhoc> list = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM monhoc WHERE ma_mon LIKE ? OR ten_mon LIKE ?")) {
+                "SELECT * FROM monhoc WHERE " +
+                "ma_mon LIKE ? OR ten_mon LIKE ? OR " +
+                "CAST(so_tin_chi AS CHAR) LIKE ? OR " +
+                "so_tiet_lt LIKE ? OR so_tiet_th LIKE ? OR hoc_ky LIKE ?")) {
             String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
+            ps.setString(3, kw);
+            ps.setString(4, kw);
+            ps.setString(5, kw);
+            ps.setString(6, kw);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Monhoc(

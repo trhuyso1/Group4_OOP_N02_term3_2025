@@ -127,7 +127,6 @@ public class diemAiven {
         return null;
     }
 
-    // Tìm kiếm theo keyword (msv, tên SV, mã môn, tên môn)
     public List<Diem> searchByAnyField(String keyword) {
         List<Diem> list = new ArrayList<>();
         String sql = "SELECT d.msv, s.fullname, d.maMon AS maMon, m.ten_mon AS tenMon, d.diemMon " +

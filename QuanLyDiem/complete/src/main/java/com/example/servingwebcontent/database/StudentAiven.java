@@ -109,11 +109,12 @@ public class StudentAiven {
         List<Student> students = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                "SELECT * FROM student WHERE msv LIKE ? OR fullname LIKE ? OR email LIKE ?")) {
+                "SELECT * FROM student WHERE " +
+                "msv LIKE ? OR fullname LIKE ? OR email LIKE ? OR gender LIKE ? OR dob LIKE ? OR khoa LIKE ? OR classname LIKE ?")) {
             String kw = "%" + keyword + "%";
-            ps.setString(1, kw);
-            ps.setString(2, kw);
-            ps.setString(3, kw);
+            for (int i = 1; i <= 7; i++) {
+                ps.setString(i, kw);
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 students.add(new Student(
